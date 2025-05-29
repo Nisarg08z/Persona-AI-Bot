@@ -29,10 +29,7 @@ Before we jump into the code, you’ll need just a couple of things:
 
 ## 🧪 What Happens When You Run It
 
-```
 ![image](https://github.com/user-attachments/assets/95b2dfd3-fb4d-429f-b37f-2342b496842c)
-
-```
 
 It genuinely sounds like him. And it gets more fun the more you chat.
 
