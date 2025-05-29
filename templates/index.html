@@ -1,27 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Chat with Sanjay Dutt</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#f97316',
+            darkBg: '#0f172a',
+            darkCard: '#1e293b',
+            darkText: '#f1f5f9'
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<body class="bg-darkBg min-h-screen flex items-center justify-center text-darkText font-sans">
 
-  <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden">
-    <div id="chat" class="p-6 space-y-4 h-[500px] overflow-y-auto">
-      
+  <div class="w-full max-w-2xl bg-darkCard rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-700">
+    <!-- Chat Area -->
+    <div id="chat" class="p-6 space-y-4 h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800">
+      <!-- Messages appear here -->
     </div>
 
-    <div class="flex border-t border-gray-200 p-4">
+    <!-- Input Area -->
+    <div class="flex border-t border-slate-700 p-4 bg-slate-900">
       <input
         id="msgInput"
         type="text"
-        placeholder="Ask something..."
-        class="flex-1 p-3 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        placeholder="Type your message..."
+        class="flex-1 p-3 rounded-l-lg bg-slate-800 border border-slate-600 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-primary"
       />
       <button
         onclick="sendMsg()"
-        class="bg-blue-500 text-white px-6 py-3 rounded-r-lg hover:bg-blue-600 transition"
+        class="bg-primary text-white px-6 py-3 rounded-r-lg hover:bg-orange-600 transition font-semibold"
       >
         Send
       </button>
@@ -37,27 +53,50 @@
       addBubble(message, 'user');
       input.value = '';
 
-      const response = await fetch('/chat', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({message})
-      });
+      try {
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
 
-      const data = await response.json();
-      addBubble(data.reply, 'bot');
+        const data = await response.json();
+        addBubble(data.reply, 'bot');
+      } catch (err) {
+        addBubble("Are bhai, kuch gadbad ho gayi lagta hai... system bolta hai - Oops! Something went wrong! Lekin tension nahi leneka, apun hai na. Thoda check karte hain kya problem hua, fir full jhakaas chalu karega.", 'bot');
+      }
     }
 
     function addBubble(text, role) {
       const chat = document.getElementById('chat');
+      const wrapper = document.createElement('div');
       const bubble = document.createElement('div');
+      const avatar = document.createElement('img');
 
-      const common = 'px-4 py-3 rounded-xl max-w-[75%]';
-      const user = 'bg-blue-100 text-blue-900 self-end text-right';
-      const bot = 'bg-orange-100 text-orange-900 self-start text-left';
+      const common = 'px-4 py-3 rounded-2xl max-w-[75%]';
+      const userStyle = 'bg-blue-600 text-white text-right';
+      const botStyle = 'bg-slate-700 text-slate-100 text-left';
 
-      bubble.className = `whitespace-pre-wrap ${common} ${role === 'user' ? user : bot}`;
+      avatar.src = role === 'user'
+      ? '/static/icon/user.jpg'
+      : '/static/icon/Sanjay_Dutt.jpg';
+
+      avatar.className = 'w-10 h-10 rounded-full border border-slate-600';
+
+      bubble.className = `whitespace-pre-wrap ${common} ${role === 'user' ? userStyle : botStyle}`;
       bubble.innerText = text;
-      chat.appendChild(bubble);
+
+      if (role === 'user') {
+        wrapper.className = 'flex justify-end items-end gap-3';
+        wrapper.appendChild(bubble);
+        wrapper.appendChild(avatar);
+      } else {
+        wrapper.className = 'flex justify-start items-start gap-3';
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(bubble);
+      }
+
+      chat.appendChild(wrapper);
       chat.scrollTop = chat.scrollHeight;
     }
   </script>
