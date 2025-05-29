@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat with Sanjay Dutt</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+  <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden">
+    <div id="chat" class="p-6 space-y-4 h-[500px] overflow-y-auto">
+      
+    </div>
+
+    <div class="flex border-t border-gray-200 p-4">
+      <input
+        id="msgInput"
+        type="text"
+        placeholder="Ask something..."
+        class="flex-1 p-3 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+      <button
+        onclick="sendMsg()"
+        class="bg-blue-500 text-white px-6 py-3 rounded-r-lg hover:bg-blue-600 transition"
+      >
+        Send
+      </button>
+    </div>
+  </div>
+
+  <script>
+    async function sendMsg() {
+      const input = document.getElementById('msgInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      addBubble(message, 'user');
+      input.value = '';
+
+      const response = await fetch('/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message})
+      });
+
+      const data = await response.json();
+      addBubble(data.reply, 'bot');
+    }
+
+    function addBubble(text, role) {
+      const chat = document.getElementById('chat');
+      const bubble = document.createElement('div');
+
+      const common = 'px-4 py-3 rounded-xl max-w-[75%]';
+      const user = 'bg-blue-100 text-blue-900 self-end text-right';
+      const bot = 'bg-orange-100 text-orange-900 self-start text-left';
+
+      bubble.className = `whitespace-pre-wrap ${common} ${role === 'user' ? user : bot}`;
+      bubble.innerText = text;
+      chat.appendChild(bubble);
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+
+</body>
+</html>
