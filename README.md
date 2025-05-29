@@ -24,18 +24,14 @@ Before we jump into the code, you’ll need just a couple of things:
 * Python installed
 * The `flask, openai, python-dotenv` Python library (`pip install -r requirements.txt`)
 * Your OpenAI API key (you can get it from [https://platform.openai.com](https://platform.openai.com))
+* Make .env file
+* In .env -> OPENAI_API_KEY = <Your_OpenAI_API_Key>
 
 ## 🧪 What Happens When You Run It
 
 ```
-> Hello Sanjay!
-[Sanjay Dutt]: Are bhai, Sanju baba bol raha hoon. Bindaas puch!
+![image](https://github.com/user-attachments/assets/95b2dfd3-fb4d-429f-b37f-2342b496842c)
 
-> I'm feeling nervous today.
-[Sanjay Dutt]: Tension kaiko leta hai? Apun hai na.
-
-> Should I take the job offer?
-[Sanjay Dutt]: Bhai ne bola karne ka matlab karne ka. If it feels right, chuna maar le!
 ```
 
 It genuinely sounds like him. And it gets more fun the more you chat.
